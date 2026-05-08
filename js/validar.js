@@ -2,35 +2,27 @@
 const patronTexto = /^[A-Za-z\s]+$/;
 const patronEmail = /^[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,6}$/;
 const formulario = document.getElementById('agregar_producto');
-
 console.log("Sistema de validación activo");
-
 function validarFormulario() {
-    
     // Inicializamos el contador cada vez que se intenta enviar
     let errores = 0;
-
     // CAPTURA DE ELEMENTOS (Referencia al input para cambiar estilos)
     const inputNombre = document.getElementById('txtNombre');
     const inputStock = document.getElementById('numStock');
     const inputFecha = document.getElementById('fecha');
     const inputPrecio = document.getElementById('precio');
     const inputEmail = document.getElementById('txtEmail');
-
     // CAPTURA DE VALORES
     let valorNombre = inputNombre.value.trim(); // .trim() elimina espacios vacíos al inicio/final
     let valorStock = inputStock.value;
     let valorFecha = inputFecha.value;
     let valorPrecio = inputPrecio.value;
     let valorEmail = inputEmail.value;
-
     //bordes cuando los input estan vacios.
     inputNombre.classList.remove('error-borde');
     inputPrecio.classList.remove('error-borde');
     inputStock.classList.remove('error-borde');
-
     console.log("Validando datos de: " + valorNombre);
-
     // --- VALIDACIÓN DE NOMBRE ---
     if (!patronTexto.test(valorNombre)) {
        // alert("Error: el nombre debe contener letras y espacios");
@@ -60,7 +52,6 @@ function validarFormulario() {
             timer: 2000
        });   
     }
-
     // --- VALIDACIÓN DE STOCK ---
     if (valorStock === "" || parseInt(valorStock) <= 0) {
        // alert("La existencia debe ser un número mayor a cero");
@@ -76,13 +67,11 @@ function validarFormulario() {
     } else {
         inputStock.style.border = "2px solid green";
     }
-
     // --- VALIDACIÓN DE FECHA ---
     if (valorFecha === "") {
         alert("Por favor, seleccione una fecha");
         errores++;
     }
-
     // --- VALIDACIÓN DE PRECIO ---
     let precioNum = parseFloat(valorPrecio);
     if (valorPrecio === "" || isNaN(precioNum) || precioNum <= 0) {
@@ -105,11 +94,9 @@ function validarFormulario() {
     }else if(valorEmail === ""){
         alert("Por favor, debe especificar un correo");
     }
-
     // Retornamos true si no hay errores, false si hay al menos uno
     return errores === 0;
 }
-
 // 2. ESCUCHADOR DE EVENTO
 formulario.addEventListener('submit', function(e) {
     // Si la validación falla (retorna false)
