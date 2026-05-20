@@ -1,7 +1,7 @@
 <?php
     // Definir la constante para que config.php nos permita entrar
     define('ACCESO', true);
-    //Extracción de inventario y conteo gerencial 
+    //Extracción de inventario y conteo gerencial. 
     include 'includes/config.php';
     //Select mejorado con los metadatos que necesitamos.
     $query = "SELECT nombre_prod, stock, precio FROM productos ORDER BY nombre_prod ASC;";//El * extrae todos los campos de las tablas 
