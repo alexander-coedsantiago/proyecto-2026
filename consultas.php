@@ -3,7 +3,7 @@
     define('ACCESO', true);
     //Extracción de inventario y conteo gerencial 
     include 'includes/config.php';
-    //Select mejorado con los metadatos que necesitamos
+    //Select mejorado con los metadatos que necesitamos.
     $query = "SELECT nombre_prod, stock, precio FROM productos ORDER BY nombre_prod ASC;";//El * extrae todos los campos de las tablas 
     $resultado = pg_query($db_conn,$query);
     if(!$resultado){
