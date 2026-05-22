@@ -1,7 +1,9 @@
 <?php 
   $alerta = isset($_GET ['status'])?$_GET['status']: "";
+  $umbral_critico = 5; //umbral de stock minimo de producto
 ?>
 <!--Encabezado dinámico -->
+<?php include 'consultas.php'; ?>
 <?php include 'includes/header.php'; ?>
   <main>
     <section>
@@ -18,9 +20,9 @@
     <input type="number" id="numStock" name="numStock"><br><br>
     <label for="selCat">Categoría:</label>
     <select name="categoria_prod" id="selCat">
-        <option value="1">Motor</option>
-        <option value="2">Interior</option>
-        <option value="3">Exterior</option>
+        <option value="3">Motor</option>
+        <option value="4">Interior</option>
+        <option value="5">Exterior</option>
     </select><br><br>
     <label for="precio">Precio Unitario:</label>
     <input type="text" id="precio" name="precio"><br><br>
@@ -30,26 +32,61 @@
   </form>
   <!--Tabla de productos en stock-->
   <div class="tabla-responsiva">
-    <table id="mitabla" border="1"> 
-      <thead>
-        <th class="columna-eliminada">Número</th>  
+    <table id="mitabla" class = "mitabla" border="1"> 
+      <thead>  
         <th>Producto</th>
-        <th>Categoría</th>
         <th>Cantidad</th>
-        <th></th>
-        <th></th>
+        <th>precio</th>
+        <th>Opciones</th>
         <th>Imagen</th>
-    </thead>
+      </thead>
     <tbody id="tablaInventario">
+      <?php 
+        //Inicio del bucle para renderizado dinamico de inventario.
+        while ($producto = pg_fetch_assoc($resultado)){
+
+        
+      ?>
       <tr>
-          <td class="columna-eliminada">1</td>
-          <td>Arreglo de flores Herberas</td>
-          <td>Ramo</td>
-          <td>50</td>
-          <td><button>Editar</button></td>
-          <td><button>Eliminar</button></td>
-          <td><img src="assets/img/Herberas.jpg" alt="Imagen del producto" width="100" height="100"></td>
-        </tr>
+        <td><?php echo $producto['nombre_prod']; ?></td>
+        <td <?php 
+              if($producto['stock']< $umbral_critico){
+                echo 'style = "color:orange; font-weight: bold"';
+              }
+            ?>>
+            <?php 
+              echo $producto['stock'];
+            ?>
+        </td>
+        
+        <td><?php $precio_formateado = number_format($producto['precio'],2,'.',',');
+              echo "$" . $precio_formateado;
+        ?>
+        </td>
+        <td><button class = "Guardar Inventario" style = "background-color: pink; margin-right:5px">Editar</button><button class = "Guardar Inventario" style = "background-color: pink; margin-right:5px">Eliminar</button></td>
+        <td>
+          <?php 
+            //comprobamos que la foto exixta o sea nula
+            if(!empty($producto['foto'])){
+              //1. postgres envia los datos bytea, hay que desencriptarilos
+              $imagen_binaria = pg_unescape_bytea($producto['foto']);
+              //2. convertimos esos datos a base64
+              $imagen_base64 = base64_encode($imagen_binaria);
+              //3. Imprimimos la imagen usando "data URI
+              //nota: asumo que son imagenes JPEG. si son PNG cambia 
+              //'Image/jpeg´ a 'image/png'
+              echo '<img src = "data:image/jpeg;base64,' . $imagen_base64 . '"
+              alt ="producto"width="80" height="80" style="object-fit:cover;
+              border_redius:5px;">';
+            }else{
+              echo '<span style ="color: pink; font-size: 12px;">sin imagen</span>';
+            }
+          ?>
+        </td>
+      </tr>
+      <?php 
+        }
+      ?>
        
     </tbody>
     </table>

@@ -10,7 +10,7 @@
         $stock =  filter_var($_POST['numStock'], FILTER_SANITIZE_NUMBER_INT);      ;
         $precio = filter_var( $_POST['precio'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
         $fecha = date("Y-m-d");
-        $categoria = $_POST['selCat'];
+        $categoria = $_POST['categoria_prod'];
         //Paso 1: Buscar si el producto ya existe en la BD.
         $sql_buscar = "SELECT stock FROM productos WHERE nombre_prod = '$nombre';";
         $res_buscar = pg_query($db_conn, $sql_buscar);
